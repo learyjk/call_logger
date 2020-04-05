@@ -9,8 +9,8 @@
     <div class="form-row align-items-center justify-content-center p-1 m-1">
         <div class="col-4 col-lg-3 mb-1">
             <label class="sr-only">Callee</label>
-            <select name="callee_id" class="form-control">
-                <option value="0" selected="true" disabled="true">(Select Callee)</option>
+            <select name="callee_id" class="form-control" required>
+                <option value="" selected="true" disabled="disabled">(Select Callee)</option>
                 {% for callee in callee_list %}
                 <option value="{{ callee.id }}" {% if callee.id|stringformat:"i" == values.callee_id %} selected {% endif %}>{{ callee.name }}</option>
                 {% endfor %}
@@ -18,7 +18,7 @@
         </div>
         <div class="col-8 col-lg-8 mb-1">
             <label class="sr-only">Notes</label>
-            <textarea class="form-control" id="notes" placeholder="Type Notes Here" rows="1"></textarea>
+            <textarea class="form-control" name="notes" id="notes" placeholder="Type Notes Here" rows="1" autocomplete="off"></textarea>
         </div>
         <div class="col col-lg-1 mb-1">
             <button class="btn btn-primary btn-block" type="submit">Add</button>
@@ -32,7 +32,7 @@
         <div class="col-4 col-lg-3 mb-1">
             <label class="sr-only">Callee</label>
             <select name="callee_id" class="form-control">
-                <option value="0">(All)</option>
+                <option value="NULL">(All)</option>
                 {% for callee in callee_list %}
                 <option value="{{ callee.id }}" {% if callee.id|stringformat:"i" == values.callee_id %} selected {% endif %}>{{ callee.name }}</option>
                 {% endfor %}
@@ -63,7 +63,7 @@
                 <h6 class="card-title p-0 m-0">{{ call.callee }}</h6>
             </div>
             <div class="col-1 text-right">
-                <a href="#" class="card-link" style="color: #8B0000;">X</a>
+                <a href="{% url 'remove' call_id=call.id %}" class="card-link" style="color: #8B0000;">X</a>
             </div>
         </div>
         <p class="card-text p-0 m-0"><small class="text-muted">{{ call.created_at }}</small></p>
