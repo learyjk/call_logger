@@ -5,7 +5,7 @@ from datetime import datetime
 
 def index(request):
     call_list = Call.objects.filter(caller=request.user).order_by('-created_at')
-    callee_list = Callee.objects.filter(owner=request.user.id)
+    callee_list = Callee.objects.filter(owner=request.user.id).order_by('name')
 
     has_calls = False
     if call_list:
@@ -20,13 +20,28 @@ def index(request):
     return render(request, 'calls/index.html', context)
 
 
+def rolodex(request):
+    callee_list = Callee.objects.filter(owner=request.user.id).order_by('name')
+
+    has_callees = False
+    if callee_list:
+        has_callees = True
+
+    context = {
+        'callee_list': callee_list,
+        'has_callees': has_callees
+    }
+
+    return render(request, 'calls/rolodex.html', context)
+
+
 def search(request):
     call_list = Call.objects.order_by('-created_at')
-    callee_list = Callee.objects.filter(owner=request.user.id)
+    callee_list = Callee.objects.filter(owner=request.user.id).order_by('name')
 
     if 'callee_id' in request.GET:
         callee_id = request.GET['callee_id']
-        if callee_id != "NULL":
+        if callee_id != "ALL":
             call_list = call_list.filter(callee_id=callee_id)
 
     if 'start_date' in request.GET:
@@ -55,7 +70,7 @@ def search(request):
     return render(request, 'calls/index.html', context)
 
 
-def add(request):
+def add_call(request):
     caller = request.user
     callee_id = request.GET['callee_id']
     notes = request.GET['notes']
@@ -68,7 +83,20 @@ def add(request):
     return redirect('index')
 
 
-def remove(request, call_id):
+def remove_call(request, call_id):
     call = Call.objects.filter(id=call_id)
     call.delete()
     return redirect('index')
+
+
+def add_callee(request):
+    callee_name = request.GET['name']
+    new_callee = Callee(name=callee_name, owner=request.user)
+    new_callee.save()
+    return redirect('rolodex')
+
+
+def remove_callee(request, callee_id):
+    callee = Callee.objects.filter(id=callee_id)
+    callee.delete()
+    return redirect('rolodex')
