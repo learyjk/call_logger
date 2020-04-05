@@ -4,6 +4,101 @@
 
 {% block content %}
 
-<h1>This is Index.HTML!</h1>
+<!-- Add Call Form -->
+<form action="{% url 'add' %}">
+    <div class="form-row align-items-center justify-content-center p-1 m-1">
+        <div class="col-4 col-lg-3 mb-1">
+            <label class="sr-only">Callee</label>
+            <select name="callee_id" class="form-control">
+                <option value="0" selected="true" disabled="true">(Select Callee)</option>
+                {% for callee in callee_list %}
+                <option value="{{ callee.id }}" {% if callee.id|stringformat:"i" == values.callee_id %} selected {% endif %}>{{ callee.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-8 col-lg-8 mb-1">
+            <label class="sr-only">Notes</label>
+            <textarea class="form-control" id="notes" placeholder="Type Notes Here" rows="1"></textarea>
+        </div>
+        <div class="col col-lg-1 mb-1">
+            <button class="btn btn-primary btn-block" type="submit">Add</button>
+        </div>
+    </div>
+</form>
+
+<!-- Filter Form -->
+<form action="{% url 'search' %}">
+    <div class="form-row align-items-center justify-content-center p-1 m-1">
+        <div class="col-4 col-lg-3 mb-1">
+            <label class="sr-only">Callee</label>
+            <select name="callee_id" class="form-control">
+                <option value="0">(All)</option>
+                {% for callee in callee_list %}
+                <option value="{{ callee.id }}" {% if callee.id|stringformat:"i" == values.callee_id %} selected {% endif %}>{{ callee.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-4 col-lg-4 mb-1">
+            <label class="sr-only">From Date</label>
+            <input class="form-control" autocomplete="off" name="start_date" id="start_date" {% if values.start_date %} placeholder={{values.start_date}} {% else %} placeholder="From Date" {% endif %}>
+        </div>
+        <div class="col-4 col-lg-4 mb-1">
+            <label class="sr-only">To Date</label>
+            <input class="form-control" autocomplete="off" name="end_date" id="end_date" {% if values.end_date %} placeholder={{values.end_date}} {% else %} placeholder="To Date" {% endif %}>
+        </div>
+        <div class="col col-lg-1 mb-1">
+            <button class="btn btn-secondary btn-block" type="submit">Filter</button>
+        </div>
+    </div>
+</form>
+
+<!-- Display calls -->
+{% if has_calls %}
+{% for call in call_list %}
+
+<div class="card p-1 m-1">
+    <div class="card-body p-1 m-1">
+        <div class="row">
+            <div class="col-11">
+                <h6 class="card-title p-0 m-0">{{ call.callee }}</h6>
+            </div>
+            <div class="col-1 text-right">
+                <a href="#" class="card-link" style="color: #8B0000;">X</a>
+            </div>
+        </div>
+        <p class="card-text p-0 m-0"><small class="text-muted">{{ call.created_at }}</small></p>
+        <p class="card-text">{{ call.notes }}</p>
+    </div>
+</div>
+
+{% endfor %}
+
+{% else %}
+<p></p>
+<h5 class="text-center">No calls to display!</h5>
+{% endif %}
+
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $('#start_date').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'fontawesome',
+            maxDate: today,
+        });
+        $('#end_date').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'fontawesome',
+            maxDate: today,
+            minDate: function() {
+                return $('#start_date').val();
+            }
+        });
+    });
+</script>
 
 {% endblock %}
