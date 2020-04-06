@@ -4,20 +4,23 @@ from datetime import datetime
 
 
 def index(request):
-    call_list = Call.objects.filter(caller=request.user).order_by('-created_at')
-    callee_list = Callee.objects.filter(owner=request.user.id).order_by('name')
+    if request.user.is_authenticated:
+        call_list = Call.objects.filter(caller=request.user).order_by('-created_at')
+        callee_list = Callee.objects.filter(owner=request.user.id).order_by('name')
 
-    has_calls = False
-    if call_list:
-        has_calls = True
+        has_calls = False
+        if call_list:
+            has_calls = True
 
-    context = {
-        'call_list': call_list,
-        'callee_list': callee_list,
-        'has_calls': has_calls
-    }
+        context = {
+            'call_list': call_list,
+            'callee_list': callee_list,
+            'has_calls': has_calls
+        }
 
-    return render(request, 'calls/index.html', context)
+        return render(request, 'calls/index.html', context)
+    else:
+        return redirect('login')
 
 
 def rolodex(request):
