@@ -3,6 +3,8 @@
 {% block title %} | Welcome {% endblock %}
 
 {% block content %}
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
 
 <!-- Add Call Form -->
 <form action="{% url 'add_call' %}">

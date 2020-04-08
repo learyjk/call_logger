@@ -12,6 +12,8 @@
                         <h5>Register</h5>
                     </div>
                     <div class="card-body">
+                        <!-- Alerts -->
+                        {% include 'partials/_alerts.html' %}
                         <form action="{% url 'register' %}" id="form" method="POST" novalidate>
                             {% csrf_token %}
                             <div class="form-group">

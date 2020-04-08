@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.contrib.auth.models import User
 
 
@@ -18,21 +18,21 @@ def register(request):
         if password == password2:
             # Check Username
             if User.objects.filter(username=username).exists():
-                print("** Username already exists **")
+                messages.warning(request, 'That username is already in use.')
                 return redirect('register')
             else:
                 if User.objects.filter(email=email).exists():
-                    print("** Email is already in use **")
+                    messages.warning(request, 'That email is already in use.')
                     return redirect('register')
                 else:
                     # looks good!
                     user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
                     user.save()
 
-                    print("** Successfully registered! **")
+                    messages.success(request, 'You are now registered and can login.')
                     return redirect('login')
         else:
-            print('Passwords do not match')
+            messages.warning(request, 'Passwords do not match.')
             return redirect('register')
 
     else:
@@ -48,10 +48,10 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
-            print("** You are logged in. **")
+            messages.success(request, 'You are now logged in.')
             return redirect('index')
         else:
-            print("** Invalid credentials **")
+            messages.warning(request, 'Invalid credentials.')
             return redirect('login')
     else:
         return render(request, 'accounts/login.html')
@@ -60,5 +60,5 @@ def login(request):
 def logout(request):
     if request.method == "POST":
         auth.logout(request)
-        print('You are now logged out')
+        messages.success(request, 'You are now logged out.')
         return redirect('login')
