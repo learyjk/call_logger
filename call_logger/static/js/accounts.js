@@ -85,19 +85,22 @@ function getFieldName(input) {
 
 // Event listeners
 form.addEventListener('submit', function(e) {
-  if (!checkLength(username, 3, 15)) {
+    if (!checkRequired([username, email, password, password2])) {
+        e.preventDefault();
+    }
+    if (!checkLength(username, 3, 15)) {
       e.preventDefault();
-  }
-  if (!checkLength(password, 6, 25)) {
+    }
+    if (!checkLength(password, 6, 25)) {
       e.preventDefault();
-  }
-  if (!checkEmail(email)) {
+    }
+    if (!checkEmail(email)) {
       e.preventDefault();
-  }
-  if (!checkPasswordsMatch(password, password2)) {
+    }
+    if (!checkPasswordsMatch(password, password2)) {
       e.preventDefault();
-  }
-  if (!checkRequired([first_name, last_name, username, email, password, password2])) {
+    }
+    if (!checkRequired([first_name, last_name])) {
       e.preventDefault();
-  }
+    }
 });
