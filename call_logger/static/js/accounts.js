@@ -85,7 +85,7 @@ function getFieldName(input) {
 
 // Event listeners
 form.addEventListener('submit', function(e) {
-    if (!checkRequired([username, email, password, password2])) {
+    if (!checkRequired([first_name, last_name, username, email, password, password2])) {
         e.preventDefault();
     }
     if (!checkLength(username, 3, 15)) {
@@ -98,9 +98,6 @@ form.addEventListener('submit', function(e) {
       e.preventDefault();
     }
     if (!checkPasswordsMatch(password, password2)) {
-      e.preventDefault();
-    }
-    if (!checkRequired([first_name, last_name])) {
       e.preventDefault();
     }
 });
