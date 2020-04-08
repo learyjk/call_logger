@@ -10,5 +10,5 @@ Bootstrap grid system.
 
 
 TODO
-Django admin CSS
+DONE Django admin CSS
 Improve Register validation and UX
