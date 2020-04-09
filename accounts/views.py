@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 
 def register(request):
-    print("Made it to the func.")
     if request.method == 'POST':
         # Get form values
         first_name = request.POST['first_name']
