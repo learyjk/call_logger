@@ -12,3 +12,7 @@ Bootstrap grid system.
 TODO
 DONE Django admin CSS
 Improve Register validation and UX
+
+BUGS
+1. press add call and lose filter settings
+2. saw a call from a different user????
