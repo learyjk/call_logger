@@ -39,7 +39,7 @@ def rolodex(request):
 
 
 def search(request):
-    call_list = Call.objects.order_by('-created_at')
+    call_list = Call.objects.filter(caller=request.user).order_by('-created_at')
     callee_list = Callee.objects.filter(owner=request.user.id).order_by('name')
 
     if 'callee_id' in request.GET:
